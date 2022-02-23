@@ -3,7 +3,7 @@ import { Task } from "../../../server/src/model/task.interface";
 import React from "react";
 import { ToDoItem } from "./todoitem";
 import { NewItemField } from "./newitemfield";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 interface ToDoListProps {
     tasks : Task[],

@@ -4,6 +4,7 @@ import { ToDoList } from './tasks/todolist';
 import { PleaseWait } from './tasks/pleasewait';
 import axios, { AxiosResponse } from 'axios';
 import { Task } from "../../server/src/model/task.interface";
+import { Outlet } from 'react-router-dom';
 
 export class App extends React.Component<{},{receivedTasks : boolean, tasks : Task[]}> {
   state = {receivedTasks : false, tasks : []};
@@ -20,9 +21,11 @@ export class App extends React.Component<{},{receivedTasks : boolean, tasks : Ta
   }
 
   override render() {
-    if (this.state.receivedTasks) return <ToDoList tasks = {this.state.tasks} 
+    if (this.state.receivedTasks) return <div><ToDoList tasks = {this.state.tasks} 
       refreshTaskList={() => this.refreshTaskList()}
     />
+    <Outlet />
+    </div>
     else return <PleaseWait />
   }
 }
