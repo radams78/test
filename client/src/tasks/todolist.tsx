@@ -33,9 +33,9 @@ export class ToDoList extends React.Component<ToDoListProps, {}> {
     override render() {
       return <ul>
         {this.props.tasks.map((task: Task) => (task.done) ?
-          <ToDoItem key={task.id.toString()} description={task.description} done={true} handleCheck={() => { }} />
+          <ToDoItem key={task.id.toString()} task={task} handleCheck={() => { }} />
           :
-          <ToDoItem key={task.id.toString()} description={task.description} done={false}
+          <ToDoItem key={task.id.toString()} task={task}
             handleCheck={() => { this.markTaskDone(task.id); }} />
         )}
         <NewItemField key="new item" addNewTask={this.addNewTask} />

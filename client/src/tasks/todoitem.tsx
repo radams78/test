@@ -1,14 +1,17 @@
+import { Task } from "../../../server/src/model/task.interface";
+
+import { Link } from "react-router-dom";
+
 export function ToDoItem(props: {
-    description: string,
-    done: boolean,
+    task : Task,
     handleCheck: () => void
   }) {
     return <li>
       <input type="checkbox"
-        checked={props.done}
+        checked={props.task.done}
         onChange={(event) => { props.handleCheck(); }}
       />
-      {props.description}
+      <Link to={`/task/${props.task.id}`}>{props.task.description}</Link>
     </li>
   }
   

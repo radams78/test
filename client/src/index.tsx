@@ -6,6 +6,7 @@ import { Help } from './Help';
 import { HomePage } from './HomePage';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import { TaskView } from './tasks/taskview';
 
 const rootElement = <React.StrictMode>
   <BrowserRouter>
@@ -13,6 +14,7 @@ const rootElement = <React.StrictMode>
       <Route path="/" element={<HomePage />}>
         <Route path="task" element={<App />}>
           <Route path="instructions" element={<p>Click a task</p>} />
+          <Route path=":taskId" element={<TaskView />} />
         </Route>
         <Route path="help" element={<Help />} />
       </Route>      

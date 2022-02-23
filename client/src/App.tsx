@@ -24,7 +24,7 @@ export class App extends React.Component<{},{receivedTasks : boolean, tasks : Ta
     if (this.state.receivedTasks) return <div><ToDoList tasks = {this.state.tasks} 
       refreshTaskList={() => this.refreshTaskList()}
     />
-    <Outlet />
+    <Outlet context={this.state.tasks} />
     </div>
     else return <PleaseWait />
   }
