@@ -1,13 +1,15 @@
 import * as Express from "express";
 import { makeTaskService , ITaskService } from "../service/task.service";
 import { Task } from "../model/task.interface";
+import { makeTaskServiceDB } from "../service/task.servicedb";
 
-export function makeTaskRouter(taskService : ITaskService): Express.Express {
+export function makeTaskRouter(taskService : Promise<ITaskService>): Express.Express {
     const taskRouter: Express.Express = Express();
 
     taskRouter.get("/", async (req: Express.Request, res: Express.Response) => {
         try {
-            const tasks: Array<Task> = await taskService.getTasks();
+            const ts = await taskService;
+            const tasks: Array<Task> = await ts.getTasks();
             res.status(200).send(tasks);
         } catch (e: any) {
             res.status(500).send(e.message);
@@ -23,7 +25,8 @@ export function makeTaskRouter(taskService : ITaskService): Express.Express {
                 return;
             }
 
-            const task: Task = await taskService.createTask(description);
+            const ts = await taskService;
+            const task: Task = await ts.createTask(description);
             res.status(201).send(task);
         } catch (e: any) {
             res.status(500).send(e.message);
@@ -39,7 +42,8 @@ export function makeTaskRouter(taskService : ITaskService): Express.Express {
                 return;
             }
 
-            const completed: boolean = await taskService.markDone(id);
+            const ts = await taskService;
+            const completed: boolean = await ts.markDone(id);
 
             if (!completed) {
                 res.status(400).send(`No task with id ${id}\n`);
@@ -55,5 +59,9 @@ export function makeTaskRouter(taskService : ITaskService): Express.Express {
 }
 
 export function taskRouter() : Express.Express {
-    return makeTaskRouter(makeTaskService());   
+    return makeTaskRouter(Promise.resolve(makeTaskService()));   
+}
+
+export function taskRouterDB() : Express.Express {
+    return makeTaskRouter(makeTaskServiceDB());
 }
