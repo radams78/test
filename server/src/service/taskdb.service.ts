@@ -1,34 +1,21 @@
 import { Task } from "../model/task.interface";
 import { ITaskService } from "./itask.service";
-import { connect, Schema, model } from "mongoose";
+import { connect, Schema, model, Model } from "mongoose";
+import { connectToDatabase } from "../db/todo.db";
 
-connect("mongodb+srv://radams78:gY9NDTKVT3gdmLw@tutorial.2ayhy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+class TaskDBService implements ITaskService {
+    private taskModel : Model<Task>
 
-const taskSchema : Schema = new Schema({
-    id : {
-        type : Number,
-        required : true,
-        unique: true
-    },
-    description : {
-        type : String,
-        required : true
-    },
-    done : {
-        type : Boolean,
-        required : true
+    constructor(taskModel : Model<Task>) {
+        this.taskModel = taskModel;
     }
-})
 
-const taskModel = model<Task>("Todo", taskSchema);
-
-export class TaskDBService implements ITaskService {
     async getTasks(): Promise<Task[]> {
-        return await taskModel.find();
+        return await this.taskModel.find();
     }
 
     async createTask(description: string): Promise<Task> {
-        return await taskModel.create({
+        return await this.taskModel.create({
             id : new Date().valueOf(),
             description : description,
             done : false
@@ -38,4 +25,8 @@ export class TaskDBService implements ITaskService {
     markDone(id: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
+}
+
+export async function taskDBService() : Promise<ITaskService> {
+    return new TaskDBService(await connectToDatabase());
 }
