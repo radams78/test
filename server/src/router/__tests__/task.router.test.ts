@@ -2,8 +2,8 @@ import { Express } from "express";
 import * as SuperTest from "supertest";
 
 import { makeTaskRouter } from "../task.router";
-import { ITaskService } from "../../service/task.service";
 import { Task } from "../../model/task.interface";
+import { ITaskService } from "../../service/itask.service";
 
 test("A GET request to / should send a response with the list of tasks", () => {
     const listOfTasks : Task[] = [

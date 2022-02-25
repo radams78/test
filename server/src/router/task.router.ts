@@ -1,6 +1,8 @@
 import * as Express from "express";
-import { makeTaskService , ITaskService } from "../service/task.service";
+import { makeTaskService } from "../service/task.service";
+import { ITaskService } from "../service/itask.service";
 import { Task } from "../model/task.interface";
+import { TaskDBService } from "../service/taskdb.service";
 
 export function makeTaskRouter(taskService : ITaskService): Express.Express {
     const taskRouter: Express.Express = Express();
@@ -55,5 +57,5 @@ export function makeTaskRouter(taskService : ITaskService): Express.Express {
 }
 
 export function taskRouter() : Express.Express {
-    return makeTaskRouter(makeTaskService());   
+    return makeTaskRouter(new TaskDBService());   
 }
