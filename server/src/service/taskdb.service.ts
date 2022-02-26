@@ -1,21 +1,15 @@
 import { Task } from "../model/task.interface";
 import { ITaskService } from "./itask.service";
-import { connect, Schema, model, Model } from "mongoose";
-import { connectToDatabase } from "../db/todo.db";
+import { taskModel } from "../db/todo.db";
 
 class TaskDBService implements ITaskService {
-    private taskModel : Model<Task>
-
-    constructor(taskModel : Model<Task>) {
-        this.taskModel = taskModel;
-    }
 
     async getTasks(): Promise<Task[]> {
-        return await this.taskModel.find();
+        return await taskModel.find();
     }
 
     async createTask(description: string): Promise<Task> {
-        return await this.taskModel.create({
+        return await taskModel.create({
             id : new Date().valueOf(),
             description : description,
             done : false
@@ -27,6 +21,4 @@ class TaskDBService implements ITaskService {
     }
 }
 
-export async function taskDBService() : Promise<ITaskService> {
-    return new TaskDBService(await connectToDatabase());
-}
+export const taskDBService = new TaskDBService();

@@ -3,13 +3,12 @@ import { ITaskService } from "../service/itask.service";
 import { Task } from "../model/task.interface";
 import { taskDBService } from "../service/taskdb.service";
 
-export function makeTaskRouter(taskService : Promise<ITaskService>): Express.Express {
+export function makeTaskRouter(taskService : ITaskService): Express.Express {
     const taskRouter: Express.Express = Express();
 
     taskRouter.get("/", async (req: Express.Request, res: Express.Response) => {
         try {
-            const ts = await taskService;
-            const tasks: Array<Task> = await ts.getTasks();
+            const tasks: Array<Task> = await taskService.getTasks();
             res.status(200).send(tasks);
         } catch (e: any) {
             res.status(500).send(e.message);
@@ -25,8 +24,7 @@ export function makeTaskRouter(taskService : Promise<ITaskService>): Express.Exp
                 return;
             }
 
-            const ts = await taskService;
-            const task: Task = await ts.createTask(description);
+            const task: Task = await taskService.createTask(description);
             res.status(201).send(task);
         } catch (e: any) {
             res.status(500).send(e.message);
@@ -42,8 +40,7 @@ export function makeTaskRouter(taskService : Promise<ITaskService>): Express.Exp
                 return;
             }
 
-            const ts = await taskService;
-            const completed: boolean = await ts.markDone(id);
+            const completed: boolean = await taskService.markDone(id);
 
             if (!completed) {
                 res.status(400).send(`No task with id ${id}\n`);
@@ -59,5 +56,5 @@ export function makeTaskRouter(taskService : Promise<ITaskService>): Express.Exp
 }
 
 export function taskRouter() : Express.Express {
-    return makeTaskRouter(taskDBService());   
+    return makeTaskRouter(taskDBService);   
 }
