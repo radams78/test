@@ -16,7 +16,7 @@ export class App extends React.Component<{},{receivedTasks : boolean, tasks : Ta
   private async refreshTaskList() {
     // TODO Extract hostname
     // TODO Handle timeout?
-    const res: AxiosResponse<Task[]> = await axios.get<Task[]>("http://localhost:8080/task");
+    const res: AxiosResponse<Task[]> = await axios.get("http://localhost:8080/task");
     this.setState({ receivedTasks : true, tasks: res.data });
   }
 
