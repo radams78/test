@@ -16,8 +16,12 @@ class TaskDBService implements ITaskService {
         })
     }
 
-    markDone(id: number): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async markDone(id: number): Promise<boolean> {
+        const result = await taskModel.updateOne(
+            {id : id},
+            {done : true}
+        );
+        return (result.matchedCount === 1);
     }
 }
 
