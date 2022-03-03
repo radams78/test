@@ -2,28 +2,28 @@ import { FormEvent, useState } from "react";
 
 export function NewItemField(props: { addNewTask: (description: string) => void }) {
     const [description, setDescription] = useState("");
-    const [errors, setErrors] = useState({newDescription : ""})
-
-    async function handleSubmit (event : FormEvent) {
-      event.preventDefault();
-      if (description === "") {
-        setErrors({newDescription: "Task cannot be empty"});
-        return;
-      }
-      if (! (description[0] >= "A" && description[0] <= "Z")) {
-        setErrors({newDescription: "Task must start with a capital letter"});
-        return;
-      }
-      props.addNewTask(description);
-      setErrors({newDescription : ""});
-    }
+    const [error, setError] = useState("");
 
     return <li>
-      <form onSubmit={(event) => handleSubmit(event)}>
-        <input type="text" required value={description} onChange={(event) => {
+      <form onSubmit={async (event) => {
+        event.preventDefault();
+
+        if (description === "") {
+          setError("Description cannot be empty");
+          return;
+        }
+        
+        if (description[0] >= '0' && description[0] <= '9') {
+          setError("Description must not start with a number");
+          return;
+        }
+
+        props.addNewTask(description);
+      }}>
+        <input type="text" value={description} onChange={(event) => {
           setDescription(event.target.value);
         }} />
-        {errors.newDescription == "" ? "" : <span style={{color:"red"}}>{errors.newDescription}</span>}
+        {error ? <span style={{color: "red"}}>{error}</span> : ""}
       </form>
     </li>
   }

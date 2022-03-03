@@ -2,20 +2,20 @@ import { app } from "./start";
 import * as SuperTest from "supertest";
 import { Task } from "./model/task.interface";
 
-test("If we PUT a task T then GET the list of tasks, we should get the lits [T]", () => {
+jest.mock("./db/conn");
+
+test("If we PUT a task T then GET the list of tasks, we should get the lits [T]", async () => {
     const request : SuperTest.SuperTest<SuperTest.Test> = 
         SuperTest(app);
 
-    request.put("/task")
-        .send({description : "Test data"})
-        .end((err, res) => {
-            if (err) throw err;
-        });
+    const res = await request.put("/task")
+        .send({description:"Test data"});
+    console.log(res.body);
+    expect(res.statusCode).toBe(201);
 
-    return request.get("/task")
-        .then((res) => {
-            expect(res.statusCode).toBe(200);
-            expect(res.body.length).toBe(1);
-            expect(res.body[0].description).toEqual("Test data");
-        });
+    const res2 = await request.get("/task");
+    expect(res2.statusCode).toBe(200);
+    console.log(res2.body);
+    expect(res2.body.length).toBe(1);
+    expect(res2.body[0].description).toEqual("Test data");
 });

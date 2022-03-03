@@ -18,4 +18,7 @@ const taskSchema : Schema = new Schema({
     }
 })
 
-export const taskModel = conn.model<Task>("Todo", taskSchema);
+async function makeTaskModel() {
+    return (await conn).model<Task>("Todo", taskSchema);   
+}
+export const taskModel = makeTaskModel();

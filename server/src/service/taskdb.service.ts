@@ -5,11 +5,13 @@ import { taskModel } from "../db/todo.db";
 class TaskDBService implements ITaskService {
 
     async getTasks(): Promise<Task[]> {
-        return await taskModel.find();
+        const tm = await taskModel;
+        return await tm.find();
     }
 
     async createTask(description: string): Promise<Task> {
-        return await taskModel.create({
+        const tm = await taskModel;
+        return await tm.create({
             id : new Date().valueOf(),
             description : description,
             done : false
@@ -17,7 +19,8 @@ class TaskDBService implements ITaskService {
     }
 
     async markDone(id: number): Promise<boolean> {
-        const result = await taskModel.updateOne(
+        const tm = await taskModel;
+        const result = await tm.updateOne(
             {id : id},
             {done : true}
         );
