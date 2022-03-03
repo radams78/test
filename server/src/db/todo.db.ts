@@ -3,7 +3,6 @@ import {Task} from "../model/task.interface";
 import { conn } from "./conn";
 
 const taskSchema : Schema = new Schema({
-    task : [Task],
     id : {
         type : Number,
         required : true,
